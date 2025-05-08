@@ -45,7 +45,10 @@ public:
 
    stack()                            { container.resize(0); }
    stack(const stack <T>& rhs) { container = rhs.container; }
-   stack(      stack <T> && rhs)      { container = std::move(rhs.container); }
+   stack(      stack <T> && rhs)      {
+      container = std::move(rhs.container);
+      rhs.container.clear();
+   }
    stack(const std::vector<T> &  rhs) 
    { 
       container.resize(0);
@@ -95,7 +98,7 @@ public:
    // 
 
    void push(const T& t) { container.push_back(t); }
-   void push(      T&& t) { container.push_back(t); }
+   void push(      T&& t) { container.push_back(std::move(t)); }
 
    //
    // Remove
