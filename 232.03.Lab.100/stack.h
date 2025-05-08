@@ -15,7 +15,7 @@
  *    This will contain the class definition of:
  *       stack             : similar to std::stack
  * Author
- *    <your names here>
+ *    Ryan Whitehead, Cesar 
  ************************************************************************/
 
 #pragma once
@@ -43,11 +43,25 @@ public:
    // Construct
    // 
 
-   stack()                            { container.resize(7); }
-   stack(const stack <T> &  rhs)      { container.resize(7); }
-   stack(      stack <T> && rhs)      { container.resize(7); }
-   stack(const std::vector<T> &  rhs) { container.resize(7); }
-   stack(      std::vector<T> && rhs) { container.resize(7); }
+   stack()                            { container.resize(0); }
+   stack(const stack <T>& rhs) { container = rhs.container; }
+   stack(      stack <T> && rhs)      { container = std::move(rhs.container); }
+   stack(const std::vector<T> &  rhs) 
+   { 
+      container.resize(0);
+      for (int i = 0; i < rhs.size(); i++)
+      {
+         container.push_back(rhs[i]);
+      }
+   }
+   stack(      std::vector<T> && rhs) 
+   {
+      container.resize(0);
+      for (int i = 0; i < rhs.size(); i++)
+      {
+         container.push_back(rhs[i]);
+      }
+   }
    ~stack()                           {                      }
 
    //
@@ -56,45 +70,47 @@ public:
 
    stack <T> & operator = (const stack <T> & rhs)
    {
+      container = rhs.container;
       return *this;
    }
    stack <T>& operator = (stack <T> && rhs)
    {
+      container = std::move(rhs.container);
       return *this;
    }
    void swap(stack <T>& rhs)
    {
-
+      std::swap(container, rhs.container);
    }
 
    // 
    // Access
    //
 
-         T& top()       { return *(new T); }
-   const T& top() const { return *(new T); }
+         T& top()       { return container[container.size() - 1]; }
+   const T& top() const { return container[container.size() - 1]; }
 
    // 
    // Insert
    // 
 
-   void push(const T&  t) {  }
-   void push(      T&& t) {  }
+   void push(const T& t) { container.push_back(t); }
+   void push(      T&& t) { container.push_back(t); }
 
    //
    // Remove
    //
 
    void pop() 
-   { 
-      
+   {
+      container.pop_back();
    }
 
    //
    // Status
    //
-   size_t  size () const { return 99;  }
-   bool empty   () const { return true; }
+   size_t  size () const { return container.size();  }
+   bool empty   () const { return container.size() == 0; }
    
 private:
    
