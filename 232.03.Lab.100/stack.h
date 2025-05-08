@@ -106,7 +106,7 @@ public:
 
    void pop() 
    {
-      container.pop_back();
+      if (container.size() > 0) container.pop_back();
    }
 
    //
