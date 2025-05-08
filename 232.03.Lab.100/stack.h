@@ -95,7 +95,7 @@ public:
    // 
 
    void push(const T& t) { container.push_back(t); }
-   void push(      T&& t) { container.push_back(t); }
+   void push(      T&& t) { container.push_back(std::move(t)); }
 
    //
    // Remove
@@ -103,7 +103,7 @@ public:
 
    void pop() 
    {
-      container.pop_back();
+      if (container.size() > 0) container.pop_back();
    }
 
    //

@@ -68,8 +68,8 @@ public:
       test_pushMove_standard();
 
       // Delete
-
-      /* place your pop unit tests here */;
+      test_pop_standard();
+      test_popMany_standard();
 
       // Status
       test_size_empty();
@@ -1138,7 +1138,68 @@ public:
    /***************************************
     * POP
     ***************************************/
+    // pop an element from a stack with standard fixture
+   void test_pop_standard()
+   {  // setup
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 | 89 |
+      //    +----+----+----+----+
+      custom::stack<Spy> s;
+      setupStandardFixture(s);
+      Spy::reset();
 
+      // exercise
+      s.pop();
+      // verify  
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numDelete() == 1);
+      assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numCopyMove() == 0);
+      assertUnit(Spy::numAssign() == 0);
+      assertUnit(Spy::numAssignMove() == 0);
+      assertUnit(Spy::numDestructor() == 1);
+      assertUnit(s.container.size() == 3);
+      assertUnit(s.container.capacity() == 4);
+      if (s.container.size() >= 3)
+      {
+         assertUnit(s.container[s.container.size()-1] == Spy(67));
+      }
+      // teardown
+      teardownStandardFixture(s);
+   }
+
+   // pop multiple times from a stack with many elements
+   void test_popMany_standard()
+   {  // setup
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 | 89 |
+      //    +----+----+----+----+
+      custom::stack<Spy> s;
+      setupStandardFixture(s);
+      Spy::reset();
+
+      // exercise
+      s.pop();
+      s.pop();
+      s.pop();
+      s.pop();
+      // verify
+      assertUnit(Spy::numAssign() == 0);   // assign [99] <- [89]
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numDelete() == 4);
+      assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numCopyMove() == 0);
+      assertUnit(Spy::numAssignMove() == 0);
+      assertUnit(Spy::numDestructor() == 4);
+
+      assertUnit(s.container.size() == 0);
+      assertUnit(s.container.capacity() == 4);
+      // teardown
+      teardownStandardFixture(s);
+   }
 
    
    /*************************************************************
