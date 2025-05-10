@@ -15,7 +15,7 @@
  *    This will contain the class definition of:
  *       stack             : similar to std::stack
  * Author
- *    Ryan Whitehead, Cesar 
+ *    Ryan Whitehead, Cesar Tavarez
  ************************************************************************/
 
 #pragma once
