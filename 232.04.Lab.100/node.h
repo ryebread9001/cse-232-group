@@ -75,7 +75,7 @@ inline Node <T> * copy(const Node <T> * pSource)
    if (!pSource)
       return nullptr;
 
-   const Node<T>* pSrc = pSource->pnext;
+   const Node<T>* pSrc = pSource->pNext;
    Node<T>* pNewHead = new Node<T>;
    pNewHead->data = pSource->data;
 
