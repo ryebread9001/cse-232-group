@@ -15,7 +15,7 @@
  *        Node         : A class representing a Node
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    <your names here>
+ *    Cesar Tavarez & Ryan Whiteheads
  ************************************************************************/
 
 #pragma once
@@ -72,7 +72,32 @@ public:
 template <class T>
 inline Node <T> * copy(const Node <T> * pSource) 
 {
-   return new Node<T>;
+   if (!pSource)
+      return nullptr;
+
+   const Node<T>* pSrc = pSource->pnext;
+   Node<T>* pNewHead = new Node<T>;
+   pNewHead->data = pSource->data;
+
+   Node<T>* pDest = pNewHead;
+
+   while(pSrc != pSource)
+   {
+      Node<T>* pNew = new Node<T>;
+      pNew->data = pSrc->data;
+
+      pDest->pNext = pNew;
+      pNew->pPrev = pDest;
+
+      pDest = pNew;
+      pSrc = pSrc->pNext;
+   }
+
+   pDest->pNext = pNewHead;
+   pNewHead->pPrev = pDest;
+
+
+   return pNewHead;
 }
 
 /***********************************************
