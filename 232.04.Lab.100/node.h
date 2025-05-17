@@ -192,7 +192,51 @@ inline Node <T> * insert(Node <T> * pCurrent,
                   const T & t,
                   bool after = false)
 {
-   return new Node <T>;
+   if (!pCurrent) return new Node<T>(t);
+   Node<T>* pNew = new Node<T>(t);
+   if (after)
+   {
+      if (pCurrent->pNext) {
+         // set pNew next and prev
+         pNew->pNext = pCurrent->pNext;
+         pNew->pPrev = pCurrent;
+
+         // set pNew->pNext->pPrev
+         pCurrent->pNext->pPrev = pNew;
+         pCurrent->pNext = pNew;
+
+      }
+      else
+      {
+         // just add pNew onto the end
+         pNew->pNext = nullptr;
+         pCurrent->pNext = pNew;
+         pNew->pPrev = pCurrent;
+      }
+   }
+   else
+   {
+      if (pCurrent->pPrev) {
+         // set pNew next and prev
+         pNew->pPrev = pCurrent->pPrev;
+         pNew->pNext = pCurrent;
+
+         // set pNew->pNext->pPrev
+         pCurrent->pPrev->pNext = pNew;
+         pCurrent->pPrev = pNew;
+
+      }
+      else
+      {
+         // just add pNew onto the end
+         pNew->pPrev = nullptr;
+         pNew->pNext = pCurrent;
+         pCurrent->pPrev = pNew;
+      }
+   }
+
+
+   return pNew;
 }
 
 /******************************************************

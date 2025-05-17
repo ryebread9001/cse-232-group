@@ -43,14 +43,14 @@ public:
       test_swap_oneTwo();
 
       // Insert
-      //test_insert_emptyBefore();
-      //test_insert_emptyAfter();
-      //test_insert_frontBefore();
-      //test_insert_frontAfter();
-      //test_insert_backBefore();
-      //test_insert_backAfter();
-      //test_insert_middleBefore();
-      //test_insert_middleAfter();
+      test_insert_emptyBefore();
+      test_insert_emptyAfter();
+      test_insert_frontBefore();
+      test_insert_frontAfter();
+      test_insert_backBefore();
+      test_insert_backAfter();
+      test_insert_middleBefore();
+      test_insert_middleAfter();
 
       //// Remove
       //test_remove_nullptr();
