@@ -104,8 +104,8 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
-   if (!pSource)
-      return;
+   /*if (!pSource)
+      */
 
    Node<T>* pDestTemp = pDestination;
    Node<T>* pDestPrev = nullptr;
@@ -116,6 +116,7 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
    {
       pDestTemp->data = pSourceTemp->data;
 
+      // ierate
       pDestPrev = pDestTemp;
       pDestTemp = pDestTemp->pNext;
       pSourceTemp = pSourceTemp->pNext;
@@ -139,17 +140,31 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
       pSourceTemp = pSourceTemp->pNext;
    }
 
-   // delete extra dest
-   while (pDestTemp)
+   // delete extra destination nodes
+   if (pSource)
    {
-      Node<T>* pTemp = pDestTemp;
-      pDestTemp = pDestTemp->pNext;
-      delete pTemp;
+      while (pDestTemp)
+      {
+         Node<T>* pTemp = pDestTemp;
+         pDestTemp = pDestTemp->pNext;
+         delete pTemp;
+      }
+   }
+   else {
+      // if source is null delete nodes and set head to nullptr
+      while (pDestTemp)
+      {
+         Node<T>* pTemp = pDestTemp;
+         pDestTemp = pDestTemp->pNext;
+         delete pTemp;
+      }
+      pDestination = nullptr;
    }
 
    // end the list
    if (pDestPrev)
       pDestPrev->pNext = nullptr;
+
 }
 
 /***********************************************
@@ -173,7 +188,30 @@ inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 template <class T>
 inline Node <T> * remove(const Node <T> * pRemove) 
 {
-   return new Node <T>;
+   if (!pRemove) return nullptr;
+
+   // head
+   if (!pRemove->pPrev)
+   {
+      Node<T>* temp = pRemove->pNext;
+      pRemove->pNext->pPrev = nullptr;
+      delete pRemove;
+      return temp;
+   }
+
+   // tail
+   if (!pRemove->pNext)
+   {
+      Node<T>* temp = pRemove->pPrev;
+      pRemove->pPrev->pNext = nullptr;
+      delete pRemove;
+      return temp;
+   }
+   Node<T>* temp = pRemove->pPrev;
+   pRemove->pPrev->pNext = pRemove->pNext;
+   pRemove->pNext->pPrev = pRemove->pPrev;
+   delete pRemove;
+   return temp;
 }
 
 /**********************************************
