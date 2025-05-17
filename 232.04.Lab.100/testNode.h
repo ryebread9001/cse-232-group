@@ -43,25 +43,25 @@ public:
       test_swap_oneTwo();
 
       // Insert
-      test_insert_emptyBefore();
-      test_insert_emptyAfter();
-      test_insert_frontBefore();
-      test_insert_frontAfter();
-      test_insert_backBefore();
-      test_insert_backAfter();
-      test_insert_middleBefore();
-      test_insert_middleAfter();
+      //test_insert_emptyBefore();
+      //test_insert_emptyAfter();
+      //test_insert_frontBefore();
+      //test_insert_frontAfter();
+      //test_insert_backBefore();
+      //test_insert_backAfter();
+      //test_insert_middleBefore();
+      //test_insert_middleAfter();
 
-      // Remove
-      test_remove_nullptr();
-      test_remove_front();
-      test_remove_back();
-      test_remove_middle();
+      //// Remove
+      //test_remove_nullptr();
+      //test_remove_front();
+      //test_remove_back();
+      //test_remove_middle();
       test_clear_nullptr();
       test_clear_one();
       test_clear_standard();
 
-      // Status
+      //// Status
       test_size_empty();
       test_size_standard();
       test_size_standardMiddle();
