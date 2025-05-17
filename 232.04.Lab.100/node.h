@@ -15,7 +15,7 @@
  *        Node         : A class representing a Node
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    Cesar Tavarez & Ryan Whiteheads
+ *    Cesar Tavarez, Ryan Whiteheads, Roy G
  ************************************************************************/
 
 #pragma once
@@ -122,7 +122,7 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
-
+    std::swap(pLHS, pRHS);
 }
 
 /***********************************************
@@ -168,7 +168,11 @@ inline Node <T> * insert(Node <T> * pCurrent,
 template <class T>
 inline size_t size(const Node <T> * pHead)
 {
-   return 99;
+    if (pHead == NULL) {
+        return 0;
+    }
+    
+    return 1 + size(pHead->pNext);
 }
 
 /***********************************************
@@ -195,7 +199,8 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 template <class T>
 inline void clear(Node <T> * & pHead)
 {
-
+    pHead->data = NULL;
+    pHead = nullptr;
 }
 
 
