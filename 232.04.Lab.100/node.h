@@ -312,6 +312,19 @@ inline size_t size(const Node <T> * pHead)
 template <class T>
 inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 {
+   Node <T>* temp = pHead->pNext;
+   while (temp)
+   {
+      if (temp->pNext)
+      {   
+         out << temp->data << "->";
+      }
+      else
+      {
+         out << temp->data << std::endl;
+      }
+      temp = temp->pNext;
+   }
    return out;
 }
 
