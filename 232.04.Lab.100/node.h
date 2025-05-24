@@ -15,7 +15,7 @@
  *        Node         : A class representing a Node
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    Cesar Tavarez & Ryan Whiteheads
+ *    Cesar Tavarez, Ryan Whiteheads, Roy G
  ************************************************************************/
 
 #pragma once
@@ -41,15 +41,15 @@ public:
 
    Node()
    {
-      pPrev = pNext = this;
+      pPrev = pNext = nullptr;
    }
-   Node(const T &  data)
+   Node(const T &  data) : data(data)
    {
-      pPrev = pNext = this;
+      pPrev = pNext = nullptr;
    }
-   Node(      T && data)
+   Node(      T && data) : data(data)
    {
-      pPrev = pNext = this;
+      pPrev = pNext = nullptr;
    }
 
    //
@@ -75,27 +75,20 @@ inline Node <T> * copy(const Node <T> * pSource)
    if (!pSource)
       return nullptr;
 
-   const Node<T>* pSrc = pSource->pNext;
-   Node<T>* pNewHead = new Node<T>;
-   pNewHead->data = pSource->data;
+   Node<T>* pNewHead = new Node<T>(pSource->data);
+   Node<T>* pNewPrev = pNewHead;
 
-   Node<T>* pDest = pNewHead;
+   const Node<T>* temp = pSource->pNext;
 
-   while(pSrc != pSource)
+   while(temp)
    {
-      Node<T>* pNew = new Node<T>;
-      pNew->data = pSrc->data;
+      Node<T>* pNew = new Node<T>(temp->data);
+      pNewPrev->pNext = pNew;
+      pNew->pPrev = pNewPrev;
 
-      pDest->pNext = pNew;
-      pNew->pPrev = pDest;
-
-      pDest = pNew;
-      pSrc = pSrc->pNext;
+      pNewPrev = pNew;
+      temp = temp->pNext;
    }
-
-   pDest->pNext = pNewHead;
-   pNewHead->pPrev = pDest;
-
 
    return pNewHead;
 }
@@ -111,7 +104,67 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
-   
+   /*if (!pSource)
+      */
+
+   Node<T>* pDestTemp = pDestination;
+   Node<T>* pDestPrev = nullptr;
+   const Node<T>* pSourceTemp = pSource;
+
+   // copy until we hit the end of source or dest lists
+   while (pSourceTemp && pDestTemp)
+   {
+      pDestTemp->data = pSourceTemp->data;
+
+      // ierate
+      pDestPrev = pDestTemp;
+      pDestTemp = pDestTemp->pNext;
+      pSourceTemp = pSourceTemp->pNext;
+   }
+
+   // copy the rest of source
+   while (pSourceTemp)
+   {
+      Node<T>* pNewNode = new Node<T>(pSourceTemp->data);
+      if (pDestPrev)
+      {
+         pDestPrev->pNext = pNewNode;
+         pNewNode->pPrev = pDestPrev;
+      }
+      else
+      {
+         pDestination = pNewNode;
+      }
+
+      pDestPrev = pNewNode;
+      pSourceTemp = pSourceTemp->pNext;
+   }
+
+   // delete extra destination nodes
+   if (pSource)
+   {
+      while (pDestTemp)
+      {
+         Node<T>* pTemp = pDestTemp;
+         pDestTemp = pDestTemp->pNext;
+         delete pTemp;
+      }
+   }
+   else {
+      // if source is null delete nodes and set head to nullptr
+      while (pDestTemp)
+      {
+         Node<T>* pTemp = pDestTemp;
+         pDestTemp = pDestTemp->pNext;
+         delete pTemp;
+      }
+      pDestination = nullptr;
+   }
+
+   // end the list
+   if (pDestPrev)
+      pDestPrev->pNext = nullptr;
+
 }
 
 /***********************************************
@@ -122,7 +175,7 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
-
+    std::swap(pLHS, pRHS);
 }
 
 /***********************************************
@@ -135,7 +188,30 @@ inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 template <class T>
 inline Node <T> * remove(const Node <T> * pRemove) 
 {
-   return new Node <T>;
+   if (!pRemove) return nullptr;
+
+   // head
+   if (!pRemove->pPrev)
+   {
+      Node<T>* temp = pRemove->pNext;
+      pRemove->pNext->pPrev = nullptr;
+      delete pRemove;
+      return temp;
+   }
+
+   // tail
+   if (!pRemove->pNext)
+   {
+      Node<T>* temp = pRemove->pPrev;
+      pRemove->pPrev->pNext = nullptr;
+      delete pRemove;
+      return temp;
+   }
+   Node<T>* temp = pRemove->pPrev;
+   pRemove->pPrev->pNext = pRemove->pNext;
+   pRemove->pNext->pPrev = pRemove->pPrev;
+   delete pRemove;
+   return temp;
 }
 
 /**********************************************
@@ -154,7 +230,51 @@ inline Node <T> * insert(Node <T> * pCurrent,
                   const T & t,
                   bool after = false)
 {
-   return new Node <T>;
+   if (!pCurrent) return new Node<T>(t);
+   Node<T>* pNew = new Node<T>(t);
+   if (after)
+   {
+      if (pCurrent->pNext) {
+         // set pNew next and prev
+         pNew->pNext = pCurrent->pNext;
+         pNew->pPrev = pCurrent;
+
+         // set pNew->pNext->pPrev
+         pCurrent->pNext->pPrev = pNew;
+         pCurrent->pNext = pNew;
+
+      }
+      else
+      {
+         // just add pNew onto the end
+         pNew->pNext = nullptr;
+         pCurrent->pNext = pNew;
+         pNew->pPrev = pCurrent;
+      }
+   }
+   else
+   {
+      if (pCurrent->pPrev) {
+         // set pNew next and prev
+         pNew->pPrev = pCurrent->pPrev;
+         pNew->pNext = pCurrent;
+
+         // set pNew->pNext->pPrev
+         pCurrent->pPrev->pNext = pNew;
+         pCurrent->pPrev = pNew;
+
+      }
+      else
+      {
+         // just add pNew onto the end
+         pNew->pPrev = nullptr;
+         pNew->pNext = pCurrent;
+         pCurrent->pPrev = pNew;
+      }
+   }
+
+
+   return pNew;
 }
 
 /******************************************************
@@ -168,7 +288,17 @@ inline Node <T> * insert(Node <T> * pCurrent,
 template <class T>
 inline size_t size(const Node <T> * pHead)
 {
-   return 99;
+    if (pHead == NULL) {
+        return 0;
+    }
+    size_t size = 1;
+    const Node<T>* temp = pHead->pNext;
+    while (temp)
+    {
+       size++;
+       temp = temp->pNext;
+    }
+    return size;
 }
 
 /***********************************************
@@ -182,6 +312,19 @@ inline size_t size(const Node <T> * pHead)
 template <class T>
 inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 {
+   Node <T>* temp = pHead->pNext;
+   while (temp)
+   {
+      if (temp->pNext)
+      {   
+         out << temp->data << "->";
+      }
+      else
+      {
+         out << temp->data << std::endl;
+      }
+      temp = temp->pNext;
+   }
    return out;
 }
 
@@ -195,7 +338,13 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 template <class T>
 inline void clear(Node <T> * & pHead)
 {
-
+    while (pHead)
+    {
+       const Node<T>* temp = pHead;
+       pHead = pHead->pNext;
+       delete temp;
+    }
+    pHead = nullptr;
 }
 
 
