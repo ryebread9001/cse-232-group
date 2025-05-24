@@ -15,7 +15,7 @@
  *        List         : A class that represents a List
  *        ListIterator : An iterator through List
  * Author
- *    Julio Cesar Tavarez
+ *    Julio Cesar Tavarez, Ryan Whitehead, Roy Garcia
  ************************************************************************/
 
 #pragma once
