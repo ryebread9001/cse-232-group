@@ -73,7 +73,7 @@ public:
    class  iterator;
    iterator begin()  { return iterator(pHead); }
    iterator rbegin() { return iterator(); }
-   iterator end()    { return iterator(pTail); }
+   iterator end()    { return nullptr; }
 
    //
    // Access
@@ -106,7 +106,7 @@ public:
    // Status
    //
 
-   bool empty()  const { return true; }
+   bool empty()  const { return numElements < 1; }
    size_t size() const { return numElements;   }
 
 
@@ -309,7 +309,7 @@ list <T> ::list()
 template <typename T>
 list <T> ::list(list& rhs) 
 {
-   numElements = rhs.numElements;
+   //numElements = rhs.numElements;
    pHead = pTail = nullptr;
 
    for (Node* p = rhs.pHead; p != nullptr; p = p->pNext)
@@ -343,6 +343,18 @@ list <T> ::list(list <T>&& rhs)
 template <typename T>
 list <T>& list <T> :: operator = (list <T> && rhs)
 {
+
+   clear(); 
+   numElements = rhs.numElements;
+   pHead = std::move(rhs.pHead);
+   pTail = std::move(rhs.pTail);
+
+      
+   rhs.pHead = nullptr;
+   rhs.pTail = nullptr;
+   rhs.numElements = 0;
+
+
    return *this;
 }
 
@@ -356,6 +368,17 @@ list <T>& list <T> :: operator = (list <T> && rhs)
 template <typename T>
 list <T> & list <T> :: operator = (list <T> & rhs)
 {
+   clear();
+   //numElements = rhs.numElements;
+
+   Node* pSource = rhs.pHead;
+
+   while (pSource)
+   {
+      push_back(pSource->data);
+      pSource = pSource->pNext;
+   }
+
    return *this;
 }
 
@@ -369,6 +392,14 @@ list <T> & list <T> :: operator = (list <T> & rhs)
 template <typename T>
 list <T>& list <T> :: operator = (const std::initializer_list<T>& rhs)
 {
+   clear();
+   //numElements = rhs.numElements;
+
+   for (const T& item : rhs)
+   {
+      push_back(item);  // assumes you have push_back() implemented
+   }
+
    return *this;
 }
 
@@ -382,7 +413,18 @@ list <T>& list <T> :: operator = (const std::initializer_list<T>& rhs)
 template <typename T>
 void list <T> :: clear()
 {
+   Node* temp = nullptr;
+   Node* next = nullptr;
 
+   while (temp != nullptr) {
+      next = temp->pNext;
+      delete temp;
+      temp = next;
+   }
+
+   pHead = nullptr;
+   pTail = nullptr;
+   numElements = 0;
 }
 
 /*********************************************
@@ -514,6 +556,8 @@ void list <T> ::pop_back()
 template <typename T>
 void list <T> ::pop_front()
 {
+   if (pHead == nullptr) return;
+
    Node* tempNode = pHead;
    pHead = pHead->pNext;
 
@@ -538,8 +582,12 @@ void list <T> ::pop_front()
  *     COST   : O(1)
  *********************************************/
 template <typename T>
-T & list <T> :: front()
+T& list <T> ::front()
 {
+   if (pHead == nullptr)
+   {
+      throw "ERROR: unable to access data from an empty list";
+   }
    return pHead->data;
 }
 
@@ -553,6 +601,10 @@ T & list <T> :: front()
 template <typename T>
 T & list <T> :: back()
 {
+   if (pTail == nullptr)
+   {
+      throw "ERROR: unable to access data from an empty list";
+   }
    return pTail->data;
 }
 
@@ -661,7 +713,7 @@ void swap(list <T> & lhs, list <T> & rhs)
 template <typename T>
 void list<T>::swap(list <T>& rhs)
 {
-   lhs.swap(rhs);
+   std::swap(*this, rhs);
 }
 
 //#endif
