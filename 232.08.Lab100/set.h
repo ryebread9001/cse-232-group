@@ -13,7 +13,7 @@
 *        set                 : A class that represents a Set
 *        set::iterator       : An iterator through Set
 * Author
-*    <Your name here>
+*    Ryan Whitehead, Roy Garcia, Cesar Tavarez
 ************************************************************************/
 
 #pragma once
@@ -53,6 +53,7 @@ public:
    }
    set(const std::initializer_list <T> & il) 
    {
+       clear();
       for (const auto& node : il)
       {
          bst.insert(node);
@@ -161,6 +162,7 @@ public:
    //
    void clear() noexcept 
    { 
+       bst.clear();
    }
    iterator erase(iterator &it)
    { 
@@ -169,17 +171,21 @@ public:
    }
    size_t erase(const T & t) 
    {
-      // auto it = iterator(t);
-      // typename custom::BST<T>::iterator er = bst.erase(it.it);
-      return bst.numElements;
+       auto it = find(t);
+       if (it != end())
+       {
+           erase(it);
+           return 1;
+       }
+       return 0;
    }
    iterator erase(iterator &itBegin, iterator &itEnd)
    {
-      //for (auto iter = itBegin; iter != itEnd; ++iter)
-      //{
-      //   //bst.erase(iter);
-      //}
-      return iterator();
+          //for (auto iter = itBegin; iter != itEnd; ++iter)
+          //{
+          //   //bst.erase(iter);
+          //}
+          return iterator();
    }
 
 private:
