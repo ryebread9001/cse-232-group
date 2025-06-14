@@ -99,11 +99,11 @@ public:
    class iterator;
    iterator begin() const noexcept 
    { 
-      return iterator(); 
+      return iterator(bst.begin());
    }
    iterator end() const noexcept 
    { 
-      return iterator(); 
+      return iterator(bst.end());
    }
 
    //
@@ -111,7 +111,7 @@ public:
    //
    iterator find(const T& t) 
    { 
-      return iterator(); 
+      return iterator(bst.find(t)); 
    }
 
    //
@@ -119,11 +119,11 @@ public:
    //
    bool   empty() const noexcept 
    { 
-      return true;    
+      return bst.empty();    
    }
    size_t size() const noexcept 
    { 
-      return 99;     
+      return bst.size();     
    }
 
    //
@@ -131,20 +131,28 @@ public:
    //
    std::pair<iterator, bool> insert(const T& t)
    {
-      std::pair<iterator, bool> p(iterator(), true);
+      std::pair<iterator, bool> p = bst.insert(t, true);
       return p;
    }
    std::pair<iterator, bool> insert(T&& t)
    {
-      std::pair<iterator, bool> p(iterator(), true);
+      std::pair<iterator, bool> p = bst.insert(std::move(t), true);
       return p;
    }
    void insert(const std::initializer_list <T>& il)
    {
+      for (const auto& node : il)
+      {
+         bst.insert(node);
+      }
    }
    template <class Iterator>
    void insert(Iterator first, Iterator last)
    {
+      for (auto iter = first; iter != last; ++iter)
+      {
+         bst.insert(*iter);
+      }
    }
 
 
@@ -156,14 +164,21 @@ public:
    }
    iterator erase(iterator &it)
    { 
-      return iterator(); 
+      typename custom::BST<T>::iterator er = bst.erase(it.it);
+      return er; 
    }
    size_t erase(const T & t) 
    {
-      return 99;
+      // auto it = iterator(t);
+      // typename custom::BST<T>::iterator er = bst.erase(it.it);
+      return bst.numElements;
    }
    iterator erase(iterator &itBegin, iterator &itEnd)
    {
+      //for (auto iter = itBegin; iter != itEnd; ++iter)
+      //{
+      //   //bst.erase(iter);
+      //}
       return iterator();
    }
 
@@ -190,53 +205,62 @@ public:
    }
    iterator(const typename custom::BST<T>::iterator& itRHS) 
    {  
+      it = itRHS;
    }
    iterator(const iterator & rhs) 
    { 
+      it = rhs.it;
    }
    iterator & operator = (const iterator & rhs)
    {
+      this->it = rhs.it;
       return *this;
    }
 
    // equals, not equals operator
    bool operator != (const iterator & rhs) const 
-   { 
-      return true; 
+   {
+      return it != rhs.it; 
    }
    bool operator == (const iterator & rhs) const 
    { 
-      return true; 
+      return it == rhs.it;
    }
 
    // dereference operator: by-reference so we can modify the Set
    const T & operator * () const 
    { 
-      return *(new T); 
+      return *it;
    }
 
    // prefix increment
    iterator & operator ++ ()
    {
+      ++it;
       return *this;
    }
 
    // postfix increment
    iterator operator++ (int postfix)
    {
-      return *this;
+      iterator& temp = *this;
+      ++it;
+      return *temp;
    }
    
    // prefix decrement
    iterator & operator -- ()
    {
+      --it;
       return *this;
    }
    
    // postfix decrement
    iterator operator-- (int postfix)
    {
-      return *this;
+      iterator& temp = *this;
+      --it;
+      return *temp;
    }
    
 private:
