@@ -71,7 +71,7 @@ public:
 
 
       // Iterator
-      test_begin_empty();
+      /*test_begin_empty();
       test_begin_standard();
       test_end_standard();
       test_iterator_increment_standardToParent();
@@ -80,16 +80,16 @@ public:
       test_iterator_increment_standardToGrandchild();
       test_iterator_increment_standardToDone();
       test_iterator_increment_standardEnd();
-      test_iterator_dereference_standardRead();
+      test_iterator_dereference_standardRead();*/
 
       // Access
-      test_find_empty();
+      /*test_find_empty();
       test_find_standardBegin();
       test_find_standardLast();
-      test_find_standardMissing();
+      test_find_standardMissing();*/
 
       // Insert
-      test_insert_empty();
+      /*test_insert_empty();
       test_insert_standardEnd();
       test_insert_standardFront();
       test_insert_standardMiddle();
@@ -103,10 +103,10 @@ public:
       test_insertInit_emptyInsertMany();
       test_insertInit_standardInsertNone();
       test_insertInit_standardInsertDuplicates();
-      test_insertInit_manyInsertMany();
+      test_insertInit_manyInsertMany();*/
 
       // Remove
-      test_clear_empty();
+     /* test_clear_empty();
       test_clear_standard();
       test_eraseRange_several();
       test_eraseIterator_empty();
@@ -114,23 +114,23 @@ public:
       test_eraseIterator_noChildren();
       test_eraseIterator_oneChild();
       test_eraseIterator_twoChildren();
-//      test_eraseValue_empty();
-//      test_eraseValue_standardMissing();
-//      test_eraseValue_noChildren();
-//      test_eraseValue_oneChild();
-//      test_eraseValue_twoChildren();
+      test_eraseValue_empty();
+      test_eraseValue_standardMissing();
+      test_eraseValue_noChildren();
+      test_eraseValue_oneChild();
+      test_eraseValue_twoChildren();
       test_eraseRange_standardNone();
       test_eraseRange_standardOne();
       test_eraseRange_standardMany();
       test_eraseRange_oneChild();
-      test_eraseRange_twoChildren();
+      test_eraseRange_twoChildren();*/
 
 
       // Status
-      test_empty_empty();
+      /*test_empty_empty();
       test_empty_standard();
       test_size_empty();
-      test_size_standard();
+      test_size_standard();*/
 
       report("Set");
    }

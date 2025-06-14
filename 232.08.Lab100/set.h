@@ -43,20 +43,28 @@ public:
    // Construct
    //
    set() 
+   {}
+   set(const set &  rhs) : bst(rhs.bst)
    { 
+
    }
-   set(const set &  rhs)
-   { 
-   }
-   set(set && rhs) 
+   set(set && rhs) : bst(std::move(rhs.bst))
    { 
    }
    set(const std::initializer_list <T> & il) 
    {
+      for (const auto& node : il)
+      {
+         bst.insert(node);
+      }
    }
    template <class Iterator>
    set(Iterator first, Iterator last) 
    {
+      for (auto iter = first; iter != last; ++iter)
+      {
+         bst.insert(*iter);
+      }
    }
   ~set() { }
 
@@ -66,18 +74,22 @@ public:
 
    set & operator = (const set & rhs)
    {
+      bst = rhs.bst;
       return *this;
    }
    set & operator = (set && rhs)
    {
+      bst = std::move(rhs.bst);
       return *this;
    }
    set & operator = (const std::initializer_list <T> & il)
    {
+      bst = il;
       return *this;
    }
    void swap(set& rhs) noexcept
    {
+      bst.swap(rhs.bst);
    }
 
    //
