@@ -179,14 +179,17 @@ public:
        }
        return 0;
    }
-   iterator erase(iterator &itBegin, iterator &itEnd)
+   iterator erase(iterator& itBegin, iterator& itEnd)
    {
-          //for (auto iter = itBegin; iter != itEnd; ++iter)
-          //{
-          //   //bst.erase(iter);
-          //}
-          return iterator();
+      while (itBegin != itEnd)
+      {
+         itBegin = bst.erase(itBegin);  // erase returns the next safe iterator
+      }
+      return itEnd;
    }
+
+
+
 
 private:
    
@@ -247,12 +250,13 @@ public:
    }
 
    // postfix increment
-   iterator operator++ (int postfix)
+   iterator operator++(int)
    {
-      iterator& temp = *this;
-      ++it;
-      return *temp;
+      iterator temp = *this; // Make a copy (not a reference!)
+      ++(*this);             // Call prefix increment to advance this
+      return temp;           // Return the unmodified copy
    }
+
    
    // prefix decrement
    iterator & operator -- ()

@@ -581,130 +581,103 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
  * Remove a given node as specified by the iterator
  ************************************************/
 template <typename T>
-typename BST <T> ::iterator BST <T> :: erase(iterator & it)
-{  
+typename BST<T>::iterator BST<T>::erase(iterator& it)
+{
    BNode* eraseNode = it.pNode;
-   if (eraseNode == nullptr) return end();
-
-   if (eraseNode->pLeft == nullptr && eraseNode->pRight == nullptr) // no children :(
-   {
-      if (eraseNode->pParent) // if there is a parent for the node to be erased
-      {
-         if (eraseNode->pParent->pLeft == eraseNode)
-         {
-            eraseNode->pParent->pLeft = nullptr;
-         }
-         else
-         {
-            eraseNode->pParent->pRight = nullptr;
-         }
-      }
-      else
-      {
-         root = nullptr; // Node is root
-      }
-      delete eraseNode;
-      numElements--;
-      return end(); // I know this isn't exactly right but unit test doesn't complain
-   }
-
-   if (eraseNode->pLeft == nullptr || eraseNode->pRight == nullptr) // one child at left or right
-   {
-      BNode* child;
-      if (eraseNode->pLeft)
-      {
-         child = eraseNode->pLeft;
-      }
-      else
-      {
-         child = eraseNode->pRight;
-      }
-
-      if (eraseNode->pParent) // if there is a parent for the node to be erased
-      {
-         if (eraseNode->pParent->pLeft == eraseNode)
-         {
-            eraseNode->pParent->pLeft = child;
-         }
-         else
-         {
-            eraseNode->pParent->pRight = child;
-         }
-
-      }
-      else
-      {
-         root = child; // Node is root
-      }
-      child->pParent = eraseNode->pParent;
-      delete eraseNode;
-      numElements--;
+   if (eraseNode == nullptr)
       return end();
-   }
 
-   if (eraseNode->pLeft != nullptr && eraseNode->pRight != nullptr) // 2 children
+   // Compute the successor before deletion
+   iterator next(eraseNode);
+   ++next;
+
+   // Case 1: No children
+   if (eraseNode->pLeft == nullptr && eraseNode->pRight == nullptr)
    {
-      //BNode* childLeft = eraseNode->pLeft;
-      BNode* successor = eraseNode->pRight;
-      BNode* successor_parent = eraseNode;
-
-      if (eraseNode->pRight == nullptr || eraseNode->pLeft == nullptr) {
-         return end();
-      }
-
-      if (eraseNode == nullptr) {
-         return end();
-      }
-
-      while (successor->pLeft) // find the leaf on the far left of the right child
-      {
-         successor_parent = successor;
-         successor = successor->pLeft;
-      }
-
-      if (successor_parent != eraseNode) // sucessor != eraseNode->pRight
-      {
-         // move successor's right child up to successor_parent's left pointer
-         successor_parent->pLeft = successor->pRight;
-         if (successor->pRight)
-         {
-
-            successor->pRight->pParent = successor_parent;
-         }
-
-         successor->pRight = eraseNode->pRight;
-         if (successor->pRight)
-         {
-            successor->pRight->pParent = successor; // link pRight child to successor
-         }
-      }
-
-      successor->pLeft = eraseNode->pLeft;
-      if (successor->pLeft) // attach children to successor
-         successor->pLeft->pParent = successor;
-
-      successor->pParent = eraseNode->pParent;
       if (eraseNode->pParent)
       {
          if (eraseNode->pParent->pLeft == eraseNode)
-            eraseNode->pParent->pLeft = successor;
+            eraseNode->pParent->pLeft = nullptr;
          else
-            eraseNode->pParent->pRight = successor;
+            eraseNode->pParent->pRight = nullptr;
       }
       else
       {
-         root = successor; // eraseNode was root
+         root = nullptr; // deleting the root
       }
 
       delete eraseNode;
       numElements--;
-
-      iterator next(successor);
       return next;
-
    }
 
-   return end();
+   // Case 2: One child
+   if (eraseNode->pLeft == nullptr || eraseNode->pRight == nullptr)
+   {
+      BNode* child = (eraseNode->pLeft) ? eraseNode->pLeft : eraseNode->pRight;
+
+      if (eraseNode->pParent)
+      {
+         if (eraseNode->pParent->pLeft == eraseNode)
+            eraseNode->pParent->pLeft = child;
+         else
+            eraseNode->pParent->pRight = child;
+      }
+      else
+      {
+         root = child;
+      }
+
+      child->pParent = eraseNode->pParent;
+
+      delete eraseNode;
+      numElements--;
+      return next;
+   }
+
+   // Case 3: Two children
+   BNode* successor = eraseNode->pRight;
+   BNode* successorParent = eraseNode;
+
+   while (successor->pLeft)
+   {
+      successorParent = successor;
+      successor = successor->pLeft;
+   }
+
+   if (successorParent != eraseNode)
+   {
+      successorParent->pLeft = successor->pRight;
+      if (successor->pRight)
+         successor->pRight->pParent = successorParent;
+
+      successor->pRight = eraseNode->pRight;
+      if (successor->pRight)
+         successor->pRight->pParent = successor;
+   }
+
+   successor->pLeft = eraseNode->pLeft;
+   if (successor->pLeft)
+      successor->pLeft->pParent = successor;
+
+   successor->pParent = eraseNode->pParent;
+
+   if (eraseNode->pParent)
+   {
+      if (eraseNode->pParent->pLeft == eraseNode)
+         eraseNode->pParent->pLeft = successor;
+      else
+         eraseNode->pParent->pRight = successor;
+   }
+   else
+   {
+      root = successor;
+   }
+
+   delete eraseNode;
+   numElements--;
+
+   return next;
 }
 
 /*****************************************************

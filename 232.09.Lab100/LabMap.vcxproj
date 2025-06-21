@@ -19,22 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="testSet.cpp" />
+    <ClCompile Include="testMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bst.h" />
-    <ClInclude Include="set.h" />
+    <ClInclude Include="map.h" />
+    <ClInclude Include="pair.h" />
     <ClInclude Include="spy.h" />
     <ClInclude Include="testBST.h" />
-    <ClInclude Include="testSet.h" />
+    <ClInclude Include="testMap.h" />
+    <ClInclude Include="testPair.h" />
     <ClInclude Include="testSpy.h" />
     <ClInclude Include="unitTest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f9e7a3f3-555e-4727-9a24-6442beb1fddf}</ProjectGuid>
-    <RootNamespace>LabSet</RootNamespace>
+    <ProjectGuid>{2cf55b61-c8be-45d3-b4d0-89bce0e3f8b4}</ProjectGuid>
+    <RootNamespace>LabMap</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

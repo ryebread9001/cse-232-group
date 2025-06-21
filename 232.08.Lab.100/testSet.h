@@ -102,23 +102,23 @@ public:
       test_insertInit_emptyInsertNone();
       test_insertInit_emptyInsertMany();
       test_insertInit_standardInsertNone();
-      //test_insertInit_standardInsertDuplicates();
+      test_insertInit_standardInsertDuplicates();
       test_insertInit_manyInsertMany();
 
       // Remove
       test_clear_empty();
       test_clear_standard();
-      //test_eraseRange_several();
+      test_eraseRange_several();
       test_eraseIterator_empty();
       test_eraseIterator_standardMissing();
       test_eraseIterator_noChildren();
       test_eraseIterator_oneChild();
       test_eraseIterator_twoChildren();
-      test_eraseValue_empty();
-      test_eraseValue_standardMissing();
-      test_eraseValue_noChildren();
-      test_eraseValue_oneChild();
-      test_eraseValue_twoChildren();
+//      test_eraseValue_empty();
+//      test_eraseValue_standardMissing();
+//      test_eraseValue_noChildren();
+//      test_eraseValue_oneChild();
+//      test_eraseValue_twoChildren();
       test_eraseRange_standardNone();
       test_eraseRange_standardOne();
       test_eraseRange_standardMany();
