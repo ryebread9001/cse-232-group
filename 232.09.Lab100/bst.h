@@ -248,11 +248,11 @@ namespace custom
       // compare
       bool operator == (const iterator& rhs) const
       {
-         return true;
+         return pNode == rhs.pNode;
       }
       bool operator != (const iterator& rhs) const
       {
-         return true;
+         return pNode != rhs.pNode;
       }
 
       // de-reference. Cannot change because it will invalidate the BST
@@ -260,10 +260,10 @@ namespace custom
       {
          return this->pNode->data;
       }
- /*     T& operator * () 
+      T& operator * () 
       {
          return this->pNode->data;
-      }*/
+      }
 
 
       // increment and decrement
@@ -608,9 +608,10 @@ namespace custom
          {
             root = nullptr; // Node is root
          }
+         iterator next(eraseNode->pParent);
          delete eraseNode;
          numElements--;
-         return end(); // I know this isn't exactly right but unit test doesn't complain
+         return next; // I know this isn't exactly right but unit test doesn't complain
       }
 
       if (eraseNode->pLeft == nullptr || eraseNode->pRight == nullptr) // one child at left or right
@@ -644,7 +645,7 @@ namespace custom
          child->pParent = eraseNode->pParent;
          delete eraseNode;
          numElements--;
-         return end();
+         return iterator(child);
       }
 
       if (eraseNode->pLeft != nullptr && eraseNode->pRight != nullptr) // 2 children
