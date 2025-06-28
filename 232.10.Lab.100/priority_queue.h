@@ -13,7 +13,7 @@
  *    This will contain the class definition of:
  *        priority_queue          : A class that represents a Priority Queue
  * Author
- *    Cesar Tavarez
+ *    Cesar Tavarez, Ryan Whitehead, Roy Garcia
  ************************************************************************/
 
 
@@ -47,7 +47,11 @@ namespace custom
       priority_queue(Iterator first, Iterator last)
       {
          while (first != last)
-            container.push_back(*first++);
+         {
+            container.push_back(*first);
+            //container.capacity
+            first++;
+         }
          heapify();
       }
 
@@ -109,7 +113,7 @@ namespace custom
          container[0] = container.back();
          container.pop_back();
          if (!container.empty())
-            percolateDown(0);
+            percolateDown(0, true);
       }
 
       //
@@ -118,29 +122,42 @@ namespace custom
       void heapify()
       {
          for (int i = (container.size() - 2) / 2; i >= 0; --i)
-            percolateDown(i);
+         {
+            percolateDown(i, true);
+         }
       }
 
       //
-      // Percolate Down
+      // Percolate Down From A position number. 
+      // The percolate down unit tests seemed to go by pos not index so isIndex was included
       //
-      bool percolateDown(size_t index)
+      bool percolateDown(size_t num, bool isIndex = false)
       {
+         size_t index = isIndex ? num : num - 1;
+         index = index < 0 ? 0 : index;
          size_t parent = index;
          size_t left = 2 * index + 1;
          size_t right = 2 * index + 2;
-         size_t largest = parent;
+         size_t largest = index;
 
-         if (left < container.size() && container[left] > container[largest])
+         if (left < container.size() && container[left] > container[index])
+         {
             largest = left;
+         }
+         else 
+         {
+            largest = index;
+         }
 
          if (right < container.size() && container[right] > container[largest])
-            largest = right;
-
-         if (largest != parent)
          {
-            std::swap(container[parent], container[largest]);
-            percolateDown(largest);
+            largest = right;
+         }
+
+         if (largest != index)
+         {
+            std::swap(container[index], container[largest]);
+            percolateDown(largest, true);
             return true;
          }
 

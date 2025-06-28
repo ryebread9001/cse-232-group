@@ -16,7 +16,7 @@
  *        vector                 : A class that represents a Vector
  *        vector::iterator       : An interator through Vector
  * Author
- *    <your names here>
+ *    Ryan Whitehead, Cesar Tavarez, Roy Garcia
  ************************************************************************/
 
 #pragma once
@@ -558,7 +558,14 @@ namespace custom
          }
          else
          {
-            reserve(numCapacity * 2);
+            if (numCapacity < 3)
+            {
+               reserve(numCapacity + 1);
+            }
+            else
+            {
+               reserve(numCapacity * 2);
+            }
          }
       }
       data[numElements] = t;

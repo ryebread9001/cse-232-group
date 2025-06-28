@@ -181,10 +181,15 @@ public:
    }
    iterator erase(iterator& itBegin, iterator& itEnd)
    {
-      while (itBegin != itEnd)
+      // we have to convert because bst.erase returns a bst::iterator
+      typename custom::BST<T>::iterator temp = itBegin.bst_it(); 
+      typename custom::BST<T>::iterator end = itEnd.bst_it();
+
+      while (temp != end)
       {
-         itBegin = bst.erase(itBegin);  // erase returns the next safe iterator
+         temp = bst.erase(temp);
       }
+
       return itEnd;
    }
 
@@ -209,17 +214,16 @@ class set <T> :: iterator
 
 public:
    // constructors, destructors, and assignment operator
-   iterator() 
+   iterator() : it(nullptr)
    { 
    }
-   iterator(const typename custom::BST<T>::iterator& itRHS) 
-   {  
-      it = itRHS;
+   iterator(const typename custom::BST<T>::iterator& itRHS) : it(itRHS)
+   {
    }
-   iterator(const iterator & rhs) 
-   { 
-      it = rhs.it;
+   iterator(const iterator & rhs) : it(rhs.it)
+   {
    }
+   typename BST<T>::iterator bst_it() const { return it; }
    iterator & operator = (const iterator & rhs)
    {
       this->it = rhs.it;

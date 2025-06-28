@@ -260,7 +260,7 @@ namespace custom
       {
          return this->pNode->data;
       }
-      T& operator * () 
+      T& operator * ()
       {
          return this->pNode->data;
       }
@@ -456,10 +456,7 @@ namespace custom
       // Handle self-assignment
       if (this != &rhs)
       {
-         // Clear current contents (O(n) operation)
          clear();
-
-         // Swap with rhs (O(1) operation)
          swap(rhs);
       }
       return *this;
@@ -626,6 +623,18 @@ namespace custom
             child = eraseNode->pRight;
          }
 
+         BNode* successor = child;
+         BNode* successor_parent = child->pParent;
+
+         if (child->pRight || child->pLeft)
+         {
+            while (successor->pLeft) // find the leaf on the far left of the right child
+            {
+               successor_parent = successor;
+               successor = successor->pLeft;
+            }
+         }
+
          if (eraseNode->pParent) // if there is a parent for the node to be erased
          {
             if (eraseNode->pParent->pLeft == eraseNode)
@@ -645,7 +654,7 @@ namespace custom
          child->pParent = eraseNode->pParent;
          delete eraseNode;
          numElements--;
-         return iterator(child);
+         return iterator(successor);
       }
 
       if (eraseNode->pLeft != nullptr && eraseNode->pRight != nullptr) // 2 children
